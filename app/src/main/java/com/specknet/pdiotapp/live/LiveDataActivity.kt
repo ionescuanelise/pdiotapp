@@ -17,23 +17,20 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import com.specknet.pdiotapp.MainActivity
 import com.specknet.pdiotapp.R
-import com.specknet.pdiotapp.ml.CnnHarV1
+
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.RESpeckLiveData
-import com.specknet.pdiotapp.utils.RespeckDataPrediction
+
 import com.specknet.pdiotapp.utils.ThingyLiveData
-import org.tensorflow.lite.DataType
+
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
-import java.io.File
+
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import java.util.stream.Collectors
-import java.util.stream.Stream
+
 import kotlin.collections.ArrayList
 
 
@@ -69,12 +66,13 @@ class LiveDataActivity : AppCompatActivity() {
     val filterTestThingy = IntentFilter(Constants.ACTION_THINGY_BROADCAST)
 
     var predictions = ArrayList<FloatArray>()
+    var interpreter: Interpreter? = null
 
 
     @Throws(IOException::class)
     private fun loadModelFile(tflite : String): MappedByteBuffer{
         val MODEL_ASSETS_PATH = tflite
-        val assetFileDescrptor = assets.openFd(MODEL_ASSETS_PATH)
+        val assetFileDescrptor = this.assets.openFd(MODEL_ASSETS_PATH)
         val fileInputStream = FileInputStream(assetFileDescrptor.getFileDescriptor())
         val fileChannel = fileInputStream.getChannel()
         val startOffset = assetFileDescrptor.startOffset
@@ -111,12 +109,9 @@ class LiveDataActivity : AppCompatActivity() {
     }
 
 
-    val interpreter = Interpreter(loadModelFile("app/src/main/ml/CNN_HAR_v1.tflite"))
-
-
     fun getActivityPredictionString(window : Array<FloatArray>): String {
         val output = FloatArray(18)
-        interpreter.run(arrayOf(window), arrayOf(output))
+        interpreter!!.run(arrayOf(window), arrayOf(output))
         val maxIndex = output.indices.maxBy { output[it] } ?: -1
         val resultString = "Activity is: " + mapOutputLabel(maxIndex)
         return resultString
@@ -128,6 +123,7 @@ class LiveDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_live_data)
         createMap()
+        interpreter = Interpreter(loadModelFile("CNN_HAR_v1.tflite"))
 
         predictionTextView = findViewById(R.id.activityPredictionTextView)
 
