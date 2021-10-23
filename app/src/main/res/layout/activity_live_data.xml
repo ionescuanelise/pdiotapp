@@ -34,23 +34,18 @@
         android:id="@+id/thingy_graphs"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thingy Live Data"/>
-
-        <com.github.mikephil.charting.charts.LineChart
-            android:id="@+id/thingy_chart"
-            android:layout_width="match_parent"
-            android:layout_height="140dp" />
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Thingy Live Data"/>-->
 
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/activityPredictionTextView"
-        android:layout_width="139dp"
-        android:layout_height="68dp"
+        android:layout_width="241dp"
+        android:layout_height="110dp"
         android:layout_marginTop="48dp"
         android:gravity="center"
         android:text="TextView"
@@ -66,8 +61,16 @@
         android:id="@+id/respeck_chart"
         android:layout_width="match_parent"
         android:layout_height="144dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="203dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/thingy_graphs"
+        app:layout_constraintTop_toBottomOf="@+id/respeck_graphs"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <!--    <com.github.mikephil.charting.charts.LineChart-->
+<!--        android:id="@+id/thingy_chart"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="140dp"-->
+<!--        tools:layout_editor_absoluteX="0dp"-->
+<!--        tools:layout_editor_absoluteY="531dp" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
