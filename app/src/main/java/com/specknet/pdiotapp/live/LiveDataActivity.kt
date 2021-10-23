@@ -132,6 +132,11 @@ class LiveDataActivity : AppCompatActivity() {
                 try {
                     while (!this.isInterrupted) {
                         sleep(2000)
+
+                        for (i in 1..50){
+                            predictions.add(floatArrayOf(0.0734863281F, 0.0370483398F, (-3.40637207e-01).toFloat(),
+                                17.90625F, 33.171875F, 17.109375F))
+                        }
                         runOnUiThread {
                             activityPrediction = getActivityPredictionString(predictions.toTypedArray())
                             predictionTextView.setText(activityPrediction)
