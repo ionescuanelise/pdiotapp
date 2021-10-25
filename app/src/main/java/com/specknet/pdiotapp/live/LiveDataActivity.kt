@@ -65,6 +65,7 @@ class LiveDataActivity : AppCompatActivity() {
     val filterTestRespeck = IntentFilter(Constants.ACTION_RESPECK_LIVE_BROADCAST)
 //    val filterTestThingy = IntentFilter(Constants.ACTION_THINGY_BROADCAST)
 
+    var canCollect = false
     var predictions = ArrayList<FloatArray>()
     var interpreter: Interpreter? = null
 
@@ -110,6 +111,7 @@ class LiveDataActivity : AppCompatActivity() {
 
 
     fun getActivityPredictionString(window : Array<FloatArray>): String {
+        System.out.println("Got this:" + window.size)
         val output = FloatArray(18)
         interpreter!!.run(arrayOf(window), arrayOf(output))
         val maxIndex = output.indices.maxBy { output[it] } ?: -1
@@ -124,30 +126,30 @@ class LiveDataActivity : AppCompatActivity() {
         setContentView(R.layout.activity_live_data)
         createMap()
         interpreter = Interpreter(loadModelFile("CNN_HAR_v1.tflite"))
-        for (i in 1..50){
-            predictions.add(floatArrayOf(0.0734863281F, 0.0370483398F, (-3.40637207e-01).toFloat(),
-                17.90625F, 33.171875F, 17.109375F))
-        }
-        predictionTextView = findViewById(R.id.activityPredictionTextView)
-
-        val thread: Thread = object : Thread() {
-            override fun run() {
-                try {
-                    while (!this.isInterrupted) {
-                        sleep(2000)
-                        runOnUiThread {
-                            activityPrediction = getActivityPredictionString(predictions.toTypedArray())
-                            predictionTextView.setText(activityPrediction)
-                            predictions.clear()
-                        }
-                    }
-                } catch (e: InterruptedException) {
-                }
-            }
-        }
-
-        thread.start()
-
+//        for (i in 1..50){
+//            predictions.add(floatArrayOf(0.0734863281F, 0.0370483398F, (-3.40637207e-01).toFloat(),
+//                17.90625F, 33.171875F, 17.109375F))
+//        }
+//        predictionTextView = findViewById(R.id.activityPredictionTextView)
+//
+//        val thread: Thread = object : Thread() {
+//            override fun run() {
+//                try {
+//                    while (!this.isInterrupted) {
+//                        sleep(2000)
+//                        runOnUiThread {
+//                            activityPrediction = getActivityPredictionString(predictions.toTypedArray())
+//                            predictionTextView.setText(activityPrediction)
+//                            predictions.clear()
+//                        }
+//                    }
+//                } catch (e: InterruptedException) {
+//                }
+//            }
+//        }
+//
+//        thread.start()
+        canCollect = true
         setupCharts()
 
         // set up the broadcast receiver
@@ -164,14 +166,12 @@ class LiveDataActivity : AppCompatActivity() {
                         intent.getSerializableExtra(Constants.RESPECK_LIVE_DATA) as RESpeckLiveData
                     Log.d("Live", "onReceive: liveData = " + liveData)
 
-                    // get all relevant intent contents
+//                     get all relevant intent contents
                     val x = liveData.accelX
                     val y = liveData.accelY
                     val z = liveData.accelZ
 
-                    val g = liveData.gyro
-
-                    predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
+                    updatePrediction(liveData)
 
                     time += 1
                     updateGraph("respeck", x, y, z)
@@ -187,39 +187,44 @@ class LiveDataActivity : AppCompatActivity() {
         val handlerRespeck = Handler(looperRespeck)
         this.registerReceiver(respeckLiveUpdateReceiver, filterTestRespeck, null, handlerRespeck)
 
-        // set up the broadcast receiver
-//        thingyLiveUpdateReceiver = object : BroadcastReceiver() {
-//            override fun onReceive(context: Context, intent: Intent) {
-//
-//                Log.i("thread", "I am running on thread = " + Thread.currentThread().name)
-//
-//                val action = intent.action
-//
-//                if (action == Constants.ACTION_THINGY_BROADCAST) {
-//
-//                    val liveData =
-//                        intent.getSerializableExtra(Constants.THINGY_LIVE_DATA) as ThingyLiveData
-//                    Log.d("Live", "onReceive: liveData = " + liveData)
-//
-//                    // get all relevant intent contents
-//                    val x = liveData.accelX
-//                    val y = liveData.accelY
-//                    val z = liveData.accelZ
-//
-//                    time += 1
-//                    updateGraph("thingy", x, y, z)
-//
-//                }
-//            }
-//        }
+    }
 
-        // register receiver on another thread
-//        val handlerThreadThingy = HandlerThread("bgThreadThingyLive")
-//        handlerThreadThingy.start()
-//        looperThingy = handlerThreadThingy.looper
-//        val handlerThingy = Handler(looperThingy)
-//        this.registerReceiver(thingyLiveUpdateReceiver, filterTestThingy, null, handlerThingy)
-//
+    private fun updatePrediction(liveData: RESpeckLiveData) {
+        if (canCollect) {
+            val x = liveData.accelX
+            val y = liveData.accelY
+            val z = liveData.accelZ
+            val g = liveData.gyro
+
+
+            predictionTextView = findViewById(R.id.activityPredictionTextView)
+
+            val thread: Thread = object : Thread() {
+                override fun run() {
+                    try {
+                        while (!this.isInterrupted) {
+                            predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
+                            sleep(4000)
+                            canCollect = false
+                            runOnUiThread {
+                                if (predictions.size >= 50) {
+                                    val meh = predictions.take(50).toTypedArray()
+                                    System.out.println(predictions.size)
+                                    activityPrediction = getActivityPredictionString(meh)
+                                    predictionTextView.setText(activityPrediction)
+                                    predictions.clear()
+                                    canCollect = true
+                                }
+                            }
+                        }
+                    } catch (e: InterruptedException) {
+                    }
+                }
+            }
+
+            thread.start()
+
+        }
     }
 
 
