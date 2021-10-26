@@ -125,7 +125,7 @@ class LiveDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_live_data)
         createMap()
-        interpreter = Interpreter(loadModelFile("CNN_HAR_v1.tflite"))
+        interpreter = Interpreter(loadModelFile("CNN_HAR_v2.tflite"))
 //        for (i in 1..50){
 //            predictions.add(floatArrayOf(0.0734863281F, 0.0370483398F, (-3.40637207e-01).toFloat(),
 //                17.90625F, 33.171875F, 17.109375F))
@@ -204,7 +204,7 @@ class LiveDataActivity : AppCompatActivity() {
                     try {
                         while (!this.isInterrupted) {
                             predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
-                            sleep(4000)
+                            sleep(2000)
                             canCollect = false
                             runOnUiThread {
                                 if (predictions.size >= 50) {
