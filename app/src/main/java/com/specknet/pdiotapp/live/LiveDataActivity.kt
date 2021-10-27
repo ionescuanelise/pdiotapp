@@ -170,8 +170,14 @@ class LiveDataActivity : AppCompatActivity() {
                     val x = liveData.accelX
                     val y = liveData.accelY
                     val z = liveData.accelZ
+                    val g = liveData.gyro
 
-                    updatePrediction(liveData)
+                    predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
+                    if (predictions.size >= 50) {
+                        val current_predictions = predictions.take(50).toTypedArray()
+                        updatePrediction(current_predictions)
+                        predictions.clear()
+                    }
 
                     time += 1
                     updateGraph("respeck", x, y, z)
@@ -189,40 +195,26 @@ class LiveDataActivity : AppCompatActivity() {
 
     }
 
-    private fun updatePrediction(liveData: RESpeckLiveData) {
-        if (canCollect) {
-            val x = liveData.accelX
-            val y = liveData.accelY
-            val z = liveData.accelZ
-            val g = liveData.gyro
-
+    private fun updatePrediction(current_predictions: Array<FloatArray>) {
 
             predictionTextView = findViewById(R.id.activityPredictionTextView)
 
             val thread: Thread = object : Thread() {
                 override fun run() {
                     try {
-                        while (!this.isInterrupted) {
-                            predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
+//                        while (!this.isInterrupted) {
                             sleep(2000)
                             runOnUiThread {
-                                if (predictions.size >= 50) {
-                                    val meh = predictions.take(50).toTypedArray()
-                                    System.out.println(predictions.size)
-                                    activityPrediction = getActivityPredictionString(meh)
+                                    activityPrediction = getActivityPredictionString(current_predictions)
                                     predictionTextView.setText(activityPrediction)
-                                    predictions.clear()
                                 }
-                            }
-                        }
-                    } catch (e: InterruptedException) {
+//                            }
+                        } catch (e: InterruptedException) {
+                    }
                     }
                 }
-            }
 
             thread.start()
-
-        }
     }
 
 
