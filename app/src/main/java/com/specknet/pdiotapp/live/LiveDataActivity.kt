@@ -93,14 +93,14 @@ class LiveDataActivity : AppCompatActivity() {
         map.put(5, "Falling on the left");
         map.put(6, "Falling on the right");
         map.put(7, "Lying down left");
+        map.put(8, "Lying down on back");
+        map.put(9, "Lying down on stomach");
+        map.put(10, "Lying down right");
         map.put(11, "Movement");
         map.put(12, "Running");
         map.put(13, "Sitting");
         map.put(14, "Sitting bent backward");
         map.put(15, "Sitting bent forward");
-        map.put(8, "Lying down on back");
-        map.put(9, "Lying down on stomach");
-        map.put(10, "Lying down right");
         map.put(16, "Standing");
         map.put(17, "Walking at normal speed");
     }
@@ -205,7 +205,6 @@ class LiveDataActivity : AppCompatActivity() {
                         while (!this.isInterrupted) {
                             predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
                             sleep(2000)
-                            canCollect = false
                             runOnUiThread {
                                 if (predictions.size >= 50) {
                                     val meh = predictions.take(50).toTypedArray()
@@ -213,7 +212,6 @@ class LiveDataActivity : AppCompatActivity() {
                                     activityPrediction = getActivityPredictionString(meh)
                                     predictionTextView.setText(activityPrediction)
                                     predictions.clear()
-                                    canCollect = true
                                 }
                             }
                         }
@@ -275,48 +273,6 @@ class LiveDataActivity : AppCompatActivity() {
         respeckChart.data = allRespeckData
         respeckChart.invalidate()
 
-        // Thingy
-//
-//        time = 0f
-//        val entries_thingy_accel_x = ArrayList<Entry>()
-//        val entries_thingy_accel_y = ArrayList<Entry>()
-//        val entries_thingy_accel_z = ArrayList<Entry>()
-//
-//        dataSet_thingy_accel_x = LineDataSet(entries_thingy_accel_x, "Accel X")
-//        dataSet_thingy_accel_y = LineDataSet(entries_thingy_accel_y, "Accel Y")
-//        dataSet_thingy_accel_z = LineDataSet(entries_thingy_accel_z, "Accel Z")
-//
-//        dataSet_thingy_accel_x.setDrawCircles(false)
-//        dataSet_thingy_accel_y.setDrawCircles(false)
-//        dataSet_thingy_accel_z.setDrawCircles(false)
-//
-//        dataSet_thingy_accel_x.setColor(
-//            ContextCompat.getColor(
-//                this,
-//                R.color.red
-//            )
-//        )
-//        dataSet_thingy_accel_y.setColor(
-//            ContextCompat.getColor(
-//                this,
-//                R.color.green
-//            )
-//        )
-//        dataSet_thingy_accel_z.setColor(
-//            ContextCompat.getColor(
-//                this,
-//                R.color.blue
-//            )
-//        )
-//
-//        val dataSetsThingy = ArrayList<ILineDataSet>()
-//        dataSetsThingy.add(dataSet_thingy_accel_x)
-//        dataSetsThingy.add(dataSet_thingy_accel_y)
-//        dataSetsThingy.add(dataSet_thingy_accel_z)
-//
-//        allThingyData = LineData(dataSetsThingy)
-//        thingyChart.data = allThingyData
-//        thingyChart.invalidate()
     }
 
     fun updateGraph(graph: String, x: Float, y: Float, z: Float) {
@@ -334,18 +290,6 @@ class LiveDataActivity : AppCompatActivity() {
                 respeckChart.setVisibleXRangeMaximum(150f)
                 respeckChart.moveViewToX(respeckChart.lowestVisibleX + 40)
             }
-//        } else if (graph == "thingy") {
-//            dataSet_thingy_accel_x.addEntry(Entry(time, x))
-//            dataSet_thingy_accel_y.addEntry(Entry(time, y))
-//            dataSet_thingy_accel_z.addEntry(Entry(time, z))
-//
-//            runOnUiThread {
-//                allThingyData.notifyDataChanged()
-//                thingyChart.notifyDataSetChanged()
-//                thingyChart.invalidate()
-//                thingyChart.setVisibleXRangeMaximum(150f)
-//                thingyChart.moveViewToX(thingyChart.lowestVisibleX + 40)
-//            }
         }
 
 
