@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -30,6 +31,7 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+import java.util.Observer
 
 import kotlin.collections.ArrayList
 
@@ -114,12 +116,10 @@ class LiveDataActivity : AppCompatActivity() {
         System.out.println("Got this:" + window.size)
         val output = FloatArray(18)
         interpreter!!.run(arrayOf(window), arrayOf(output))
-        val maxIndex = output.indices.maxBy { output[it] } ?: -1
+        val maxIndex = output.indices.maxByOrNull<Int, Float> { it: Int -> output[it] } ?: -1
         val resultString = "Activity is: " + mapOutputLabel(maxIndex)
         return resultString
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

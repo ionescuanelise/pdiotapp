@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.specknet.pdiotapp">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -61,21 +62,11 @@
                 <action android:name="com.specknet.pdiotapp.RESPECK_DISCONNECTED" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".bluetooth.BluetoothService"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.specknet.respeckmodeltesting.RESPECK_BROADCAST" />
-            </intent-filter>
-        </service>
-
         <activity
-            android:name=".onboarding.OnBoardingActivity"
+            android:name=".HomePage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RecordingActivity"
+            android:name=".onboarding.OnBoardingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
