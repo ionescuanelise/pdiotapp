@@ -199,50 +199,50 @@ class HomePage : AppCompatActivity() {
         if (!readStoragePermissionGranted) numberOfPermissionsUngranted++
         if (!writeStoragePermissionGranted) numberOfPermissionsUngranted++
 
-        // show a general message if we need multiple permissions
-        if (numberOfPermissionsUngranted > 1) {
-            val generalSnackbar = Snackbar
-                .make(coordinatorLayout, "Several permissions are needed for correct app functioning", Snackbar.LENGTH_LONG)
-                .setAction("SETTINGS") {
-                    startActivity(Intent(Settings.ACTION_SETTINGS))
-                }
-                .show()
-        }
-        else if(numberOfPermissionsUngranted == 1) {
-            var snackbar: Snackbar = Snackbar.make(coordinatorLayout, "", Snackbar.LENGTH_LONG)
-            if (!locationPermissionGranted) {
-                snackbar = Snackbar
-                    .make(
-                        coordinatorLayout,
-                        "Location permission needed for Bluetooth to work.",
-                        Snackbar.LENGTH_LONG
-                    )
-            }
-
-            if(!cameraPermissionGranted) {
-                snackbar = Snackbar
-                    .make(
-                        coordinatorLayout,
-                        "Camera permission needed for QR code scanning to work.",
-                        Snackbar.LENGTH_LONG
-                    )
-            }
-
-            if(!readStoragePermissionGranted || !writeStoragePermissionGranted) {
-                snackbar = Snackbar
-                    .make(
-                        coordinatorLayout,
-                        "Storage permission needed to record sensor.",
-                        Snackbar.LENGTH_LONG
-                    )
-            }
-
-            snackbar.setAction("SETTINGS") {
-                val settingsIntent = Intent(Settings.ACTION_SETTINGS)
-                startActivity(settingsIntent)
-            }
-                .show()
-        }
+//        // show a general message if we need multiple permissions
+//        if (numberOfPermissionsUngranted > 1) {
+//            val generalSnackbar = Snackbar
+//                .make(coordinatorLayout, "Several permissions are needed for correct app functioning", Snackbar.LENGTH_LONG)
+//                .setAction("SETTINGS") {
+//                    startActivity(Intent(Settings.ACTION_SETTINGS))
+//                }
+//                .show()
+//        }
+//        else if(numberOfPermissionsUngranted == 1) {
+//            var snackbar: Snackbar = Snackbar.make(coordinatorLayout, "", Snackbar.LENGTH_LONG)
+//            if (!locationPermissionGranted) {
+//                snackbar = Snackbar
+//                    .make(
+//                        coordinatorLayout,
+//                        "Location permission needed for Bluetooth to work.",
+//                        Snackbar.LENGTH_LONG
+//                    )
+//            }
+//
+//            if(!cameraPermissionGranted) {
+//                snackbar = Snackbar
+//                    .make(
+//                        coordinatorLayout,
+//                        "Camera permission needed for QR code scanning to work.",
+//                        Snackbar.LENGTH_LONG
+//                    )
+//            }
+//
+//            if(!readStoragePermissionGranted || !writeStoragePermissionGranted) {
+//                snackbar = Snackbar
+//                    .make(
+//                        coordinatorLayout,
+//                        "Storage permission needed to record sensor.",
+//                        Snackbar.LENGTH_LONG
+//                    )
+//            }
+//
+//            snackbar.setAction("SETTINGS") {
+//                val settingsIntent = Intent(Settings.ACTION_SETTINGS)
+//                startActivity(settingsIntent)
+//            }
+//                .show()
+//        }
 
     }
 

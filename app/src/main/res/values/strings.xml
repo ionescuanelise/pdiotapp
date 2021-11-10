@@ -74,4 +74,7 @@
     <string name="re_type_password">Re-type Password</string>
     <string name="your_name">Full Name</string>
     <string name="createAccount">Create Account</string>
+    <string name="live_processing">Watch Live Data</string>
+    <string name="connect_sensors">Connect your Respeck</string>
+    <string name="track_history">Health Data</string>
 </resources>
