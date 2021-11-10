@@ -1,44 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinatorLayout"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <Button
+        android:id="@+id/live_button"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/health_data"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/btn_custom"
+        android:text="@string/live_processing"
+        android:textColor="#FFFFFF" />
 
+    <Button
+        android:id="@+id/ble_button"
+        android:layout_width="550px"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="142dp"
+        android:background="@drawable/btn_custom"
+        android:text="@string/connect_sensors"
+        android:textColor="#FFFFFF" />
 
-        <Button
-            android:id="@+id/live_button"
-            android:layout_width="550px"
-            android:layout_height="wrap_content"
-            android:background="#03A9F4"
-            android:text="Watch live processing"
-            android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/ble_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/health_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ble_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/btn_custom"
+        android:fontFamily="@font/roboto_regular"
+        android:text="@string/track_history"
+        android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/ble_button"
-            android:layout_width="550px"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100px"
-            android:background="#03A9F4"
-            android:text="Connect sensors"
-            android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/live_button" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="384dp"
+        android:layout_above="@+id/live_button"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="-1dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="2dp"
+        app:srcCompat="@mipmap/logo_foreground" />
+</RelativeLayout>
