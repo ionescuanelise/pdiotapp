@@ -74,13 +74,13 @@
         android:layout_width="111dp"
         android:layout_height="75dp"
         android:layout_below="@+id/btn_login"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="-18dp"
-        android:layout_marginTop="183dp"
-        android:layout_marginEnd="23dp"
-        android:layout_marginBottom="20dp"
-        android:layout_toEndOf="@+id/swipeRight"
+        android:layout_marginStart="294dp"
+        android:layout_marginTop="194dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="9dp"
         android:background="@drawable/ic_arrow_right" />
 
     <TextView

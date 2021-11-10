@@ -43,29 +43,20 @@ class LiveDataActivity : AppCompatActivity() {
     lateinit var dataSet_res_accel_y: LineDataSet
     lateinit var dataSet_res_accel_z: LineDataSet
 
-//    lateinit var dataSet_thingy_accel_x: LineDataSet
-//    lateinit var dataSet_thingy_accel_y: LineDataSet
-//    lateinit var dataSet_thingy_accel_z: LineDataSet
-
     var time = 0f
     lateinit var allRespeckData: LineData
 
     lateinit var predictionTextView : TextView
     lateinit var activityPrediction : String
 
-//    lateinit var allThingyData: LineData
 
     lateinit var respeckChart: LineChart
-//    lateinit var thingyChart: LineChart
 
     // global broadcast receiver so we can unregister it
     lateinit var respeckLiveUpdateReceiver: BroadcastReceiver
-//    lateinit var thingyLiveUpdateReceiver: BroadcastReceiver
     lateinit var looperRespeck: Looper
-//    lateinit var looperThingy: Looper
 
     val filterTestRespeck = IntentFilter(Constants.ACTION_RESPECK_LIVE_BROADCAST)
-//    val filterTestThingy = IntentFilter(Constants.ACTION_THINGY_BROADCAST)
 
     var canCollect = false
     var predictions = ArrayList<FloatArray>()
@@ -116,7 +107,7 @@ class LiveDataActivity : AppCompatActivity() {
         System.out.println("Got this:" + window.size)
         val output = FloatArray(18)
         interpreter!!.run(arrayOf(window), arrayOf(output))
-        val maxIndex = output.indices.maxByOrNull<Int, Float> { it: Int -> output[it] } ?: -1
+        val maxIndex = output.indices.maxBy{ it: Int -> output[it] } ?: -1
         val resultString = "Activity is: " + mapOutputLabel(maxIndex)
         return resultString
     }
@@ -126,29 +117,6 @@ class LiveDataActivity : AppCompatActivity() {
         setContentView(R.layout.activity_live_data)
         createMap()
         interpreter = Interpreter(loadModelFile("CNN_HAR_v2.tflite"))
-//        for (i in 1..50){
-//            predictions.add(floatArrayOf(0.0734863281F, 0.0370483398F, (-3.40637207e-01).toFloat(),
-//                17.90625F, 33.171875F, 17.109375F))
-//        }
-//        predictionTextView = findViewById(R.id.activityPredictionTextView)
-//
-//        val thread: Thread = object : Thread() {
-//            override fun run() {
-//                try {
-//                    while (!this.isInterrupted) {
-//                        sleep(2000)
-//                        runOnUiThread {
-//                            activityPrediction = getActivityPredictionString(predictions.toTypedArray())
-//                            predictionTextView.setText(activityPrediction)
-//                            predictions.clear()
-//                        }
-//                    }
-//                } catch (e: InterruptedException) {
-//                }
-//            }
-//        }
-//
-//        thread.start()
         canCollect = true
         setupCharts()
 
@@ -220,7 +188,6 @@ class LiveDataActivity : AppCompatActivity() {
 
     fun setupCharts() {
         respeckChart = findViewById(R.id.respeck_chart)
-//        thingyChart = findViewById(R.id.thingy_chart)
 
         // Respeck
 
