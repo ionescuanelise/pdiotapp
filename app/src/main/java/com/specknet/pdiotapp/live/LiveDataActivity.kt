@@ -4,21 +4,22 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.*
 import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.specknet.pdiotapp.Activity
+import com.specknet.pdiotapp.HistoryDatabase
 import com.specknet.pdiotapp.R
+import com.specknet.pdiotapp.User
 
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.RESpeckLiveData
@@ -32,12 +33,19 @@ import java.io.FileInputStream
 import java.io.IOException
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import java.util.Observer
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Duration
+import java.time.LocalDateTime
+import java.util.*
 
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class LiveDataActivity : AppCompatActivity() {
+
+    private val act = this@LiveDataActivity
 
     // global graph variables
     lateinit var dataSet_res_accel_x: LineDataSet
@@ -49,8 +57,6 @@ class LiveDataActivity : AppCompatActivity() {
 
     lateinit var predictionTextView : TextView
     lateinit var activityPrediction : String
-
-
     lateinit var respeckChart: LineChart
 
     // global broadcast receiver so we can unregister it
@@ -62,6 +68,8 @@ class LiveDataActivity : AppCompatActivity() {
     var canCollect = false
     var predictions = ArrayList<FloatArray>()
     var interpreter: Interpreter? = null
+
+    val historyDatabaseHelper = HistoryDatabase(act)
 
 
     @Throws(IOException::class)
@@ -77,6 +85,7 @@ class LiveDataActivity : AppCompatActivity() {
 
 
     val map : HashMap<Int, String> = HashMap<Int, String>()
+    val activityTable : HashMap<String, Int> = HashMap<String, Int>()
 
 //    fun createMap(){
 //        map.put(0, "Climbing stairs");
@@ -176,12 +185,26 @@ class LiveDataActivity : AppCompatActivity() {
 
     }
 
-    private fun updateHistoricalData(prediction: RespeckDataPrediction){
+    private fun updateHistoricalData(predictedActivity: String ){
 
+        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = sdf.format(Date())
 
+        postDataToSQLite(1, currentDate, predictedActivity)
 
     }
 
+    private fun postDataToSQLite(duration: Long, timestamp: String, name: String) {
+
+//        if (!databaseHelper!!.checkActivity(name)) {
+            var activity = Activity(activity_name = name,
+                duration = duration,
+                date = timestamp
+            )
+            historyDatabaseHelper!!.addActivity(activity)
+//            return true
+//        }
+    }
 
     private fun updatePrediction(current_predictions: Array<FloatArray>) {
 
