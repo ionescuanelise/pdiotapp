@@ -28,6 +28,7 @@ class HomePage : AppCompatActivity() {
     // buttons and textviews
     lateinit var liveProcessingButton: Button
     lateinit var pairingButton: Button
+    lateinit var history_data : Button
 
     // permissions
     lateinit var permissionAlertDialog: AlertDialog.Builder
@@ -62,6 +63,7 @@ class HomePage : AppCompatActivity() {
 
         liveProcessingButton = findViewById(R.id.live_button)
         pairingButton = findViewById(R.id.ble_button)
+        history_data = findViewById(R.id.health_data)
 
         permissionAlertDialog = AlertDialog.Builder(this)
 
@@ -85,6 +87,11 @@ class HomePage : AppCompatActivity() {
 
         pairingButton.setOnClickListener {
             val intent = Intent(this, ConnectingActivity::class.java)
+            startActivity(intent)
+        }
+
+        history_data.setOnClickListener {
+            val intent = Intent(this, HistoryHealthData::class.java)
             startActivity(intent)
         }
     }
