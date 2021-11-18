@@ -22,6 +22,7 @@ import com.specknet.pdiotapp.R
 
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.RESpeckLiveData
+import com.specknet.pdiotapp.utils.RespeckDataPrediction
 
 //import com.specknet.pdiotapp.utils.ThingyLiveData
 
@@ -77,25 +78,37 @@ class LiveDataActivity : AppCompatActivity() {
 
     val map : HashMap<Int, String> = HashMap<Int, String>()
 
+//    fun createMap(){
+//        map.put(0, "Climbing stairs");
+//        map.put(1, "Descending stairs");
+//        map.put(2, "Desk work");
+//        map.put(3, "Falling on knees");
+//        map.put(4, "Falling on the back");
+//        map.put(5, "Falling on the left");
+//        map.put(6, "Falling on the right");
+//        map.put(7, "Lying down left");
+//        map.put(8, "Lying down on back");
+//        map.put(9, "Lying down on stomach");
+//        map.put(10, "Lying down right");
+//        map.put(11, "Movement");
+//        map.put(12, "Running");
+//        map.put(13, "Sitting");
+//        map.put(14, "Sitting bent backward");
+//        map.put(15, "Sitting bent forward");
+//        map.put(16, "Standing");
+//        map.put(17, "Walking at normal speed");
+//    }
+
+    // grouped activities
     fun createMap(){
-        map.put(0, "Climbing stairs");
-        map.put(1, "Descending stairs");
-        map.put(2, "Desk work");
-        map.put(3, "Falling on knees");
-        map.put(4, "Falling on the back");
-        map.put(5, "Falling on the left");
-        map.put(6, "Falling on the right");
-        map.put(7, "Lying down left");
-        map.put(8, "Lying down on back");
-        map.put(9, "Lying down on stomach");
-        map.put(10, "Lying down right");
-        map.put(11, "Movement");
-        map.put(12, "Running");
-        map.put(13, "Sitting");
-        map.put(14, "Sitting bent backward");
-        map.put(15, "Sitting bent forward");
-        map.put(16, "Standing");
-        map.put(17, "Walking at normal speed");
+        map.put(0, "Climbing stairs")
+        map.put(1, "Descending stairs")
+        map.put(2, "Falling (Grouped)")
+        map.put(3, "Lying (Grouped)")
+        map.put(4, "Movement")
+        map.put(5, "Running")
+        map.put(6, "Sitting/Standing")
+        map.put(7, "Walking at normal speed")
     }
 
     fun mapOutputLabel(maxIndex : Int) : String {
@@ -105,7 +118,7 @@ class LiveDataActivity : AppCompatActivity() {
 
     fun getActivityPredictionString(window : Array<FloatArray>): String {
         System.out.println("Got this:" + window.size)
-        val output = FloatArray(18)
+        val output = FloatArray(8)
         interpreter!!.run(arrayOf(window), arrayOf(output))
         val maxIndex = output.indices.maxByOrNull <Int, Float> { it: Int -> output[it] } ?: -1
         val resultString = "Activity is: " + mapOutputLabel(maxIndex)
@@ -116,7 +129,7 @@ class LiveDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_live_data)
         createMap()
-        interpreter = Interpreter(loadModelFile("CNN_HAR_v2.tflite"))
+        interpreter = Interpreter(loadModelFile("CNN_HAR_v2_acc_86.tflite"))
         canCollect = true
         setupCharts()
 
@@ -141,8 +154,8 @@ class LiveDataActivity : AppCompatActivity() {
                     val g = liveData.gyro
 
                     predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
-                    if (predictions.size >= 50) {
-                        val current_predictions = predictions.take(50).toTypedArray()
+                    if (predictions.size >= 22) {
+                        val current_predictions = predictions.take(22).toTypedArray()
                         updatePrediction(current_predictions)
                         predictions.clear()
                     }
@@ -163,6 +176,13 @@ class LiveDataActivity : AppCompatActivity() {
 
     }
 
+    private fun updateHistoricalData(prediction: RespeckDataPrediction){
+
+
+
+    }
+
+
     private fun updatePrediction(current_predictions: Array<FloatArray>) {
 
             predictionTextView = findViewById(R.id.activityPredictionTextView)
@@ -174,6 +194,7 @@ class LiveDataActivity : AppCompatActivity() {
                             sleep(2000)
                             runOnUiThread {
                                     activityPrediction = getActivityPredictionString(current_predictions)
+//                                    updateHistoricalData(activityPrediction)
                                     predictionTextView.setText(activityPrediction)
                                 }
 //                            }
