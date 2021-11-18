@@ -22,14 +22,14 @@ class RegisterFragment: AppCompatActivity() {
         databaseHelper = DatabaseHelper(activity)
         inputValidation = InputValidation(activity)
 
-        val name: String =  (findViewById(R.id.et_name) as EditText).getText().toString()
-        val email: String =  (findViewById(R.id.et_email) as EditText).getText().toString()
-        val password: String = (findViewById(R.id.et_password) as EditText).getText().toString()
-        val password_two: String = (findViewById(R.id.et_repassword) as EditText).getText().toString()
-
         registerButton = findViewById(R.id.btn_register)
 
         registerButton.setOnClickListener {
+
+            val name: String =  (findViewById(R.id.et_name) as EditText).getText().toString()
+            val email: String =  (findViewById(R.id.et_email) as EditText).getText().toString()
+            val password: String = (findViewById(R.id.et_password) as EditText).getText().toString()
+            val password_two: String = (findViewById(R.id.et_repassword) as EditText).getText().toString()
 
             if (name == null) {
                 Snackbar.make(it, getString(R.string.error_message_name), Snackbar.LENGTH_LONG).show()

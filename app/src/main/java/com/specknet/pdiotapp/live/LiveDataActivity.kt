@@ -107,7 +107,7 @@ class LiveDataActivity : AppCompatActivity() {
         System.out.println("Got this:" + window.size)
         val output = FloatArray(18)
         interpreter!!.run(arrayOf(window), arrayOf(output))
-        val maxIndex = output.indices.maxBy{ it: Int -> output[it] } ?: -1
+        val maxIndex = output.indices.maxByOrNull <Int, Float> { it: Int -> output[it] } ?: -1
         val resultString = "Activity is: " + mapOutputLabel(maxIndex)
         return resultString
     }

@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var inputValidation: InputValidation
     private lateinit var databaseHelper: DatabaseHelper
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -31,37 +30,44 @@ class MainActivity : AppCompatActivity() {
         databaseHelper = DatabaseHelper(activity)
         inputValidation = InputValidation(activity)
 
-        val email: String =  (findViewById(R.id.et_email) as EditText).getText().toString()
-        val password: String = (findViewById(R.id.et_password) as EditText).getText().toString()
+//        val email: String = (findViewById(R.id.et_email) as EditText).getText().toString()
+//        val password: String = (findViewById(R.id.et_password) as EditText).getText().toString()
 
         loginButton = findViewById(R.id.btn_login)
-        registerButton = findViewById(R.id.swipe_register)
-
-
-        loginButton.setOnClickListener {
-            if(email != null && password != null && !android.util.Patterns.EMAIL_ADDRESS.matcher(password).matches() && verifyFromSQLite(email, password)) {
-                val intent = Intent(this, HomePage::class.java)
-                startActivity(intent)
-            }
-            else {
-                Snackbar.make(it, getString(R.string.error_valid_email_password), Snackbar.LENGTH_LONG).show()
-            }
-        }
+        registerButton = findViewById(R.id.btn_register)
 
         registerButton.setOnClickListener {
             val intent = Intent(this, RegisterFragment::class.java)
             startActivity(intent)
         }
 
-    }
+        loginButton.setOnClickListener {
+            val email: String = (findViewById(R.id.et_email) as EditText).getText().toString()
+            val password: String = (findViewById(R.id.et_password) as EditText).getText().toString()
 
-    private fun verifyFromSQLite(email: String, password: String) : Boolean {
+            if (email != null && password != null && !android.util.Patterns.EMAIL_ADDRESS.matcher(
+                    password
+                ).matches() && verifyFromSQLite(email, password)
+            ) {
+                val intent = Intent(this, HomePage::class.java)
+                startActivity(intent)
+            } else {
+                Snackbar.make(
+                    it,
+                    getString(R.string.error_valid_email_password),
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
 
-        if (databaseHelper!!.checkUser(email, password)) {
-            return true;
         }
-        else
-            return false;
-    }
+        }
+
+        private fun verifyFromSQLite(email: String, password: String): Boolean {
+
+            if (databaseHelper!!.checkUser(email, password)) {
+                return true;
+            } else
+                return false;
+        }
 
 }
