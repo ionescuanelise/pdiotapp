@@ -85,7 +85,6 @@ class LiveDataActivity : AppCompatActivity() {
 
 
     val map : HashMap<Int, String> = HashMap<Int, String>()
-    val activityTable : HashMap<String, Int> = HashMap<String, Int>()
 
 //    fun createMap(){
 //        map.put(0, "Climbing stairs");
@@ -108,16 +107,25 @@ class LiveDataActivity : AppCompatActivity() {
 //        map.put(17, "Walking at normal speed");
 //    }
 
-    // grouped activities
+    // grouped activities v2
+//    fun createMap(){
+//        map.put(0, "Climbing stairs")
+//        map.put(1, "Descending stairs")
+//        map.put(2, "Falling (Grouped)")
+//        map.put(3, "Lying (Grouped)")
+//        map.put(4, "Movement")
+//        map.put(5, "Running")
+//        map.put(6, "Sitting/Standing")
+//        map.put(7, "Walking at normal speed")
+//    }
+
+    //grouped activities v4
     fun createMap(){
-        map.put(0, "Climbing stairs")
-        map.put(1, "Descending stairs")
-        map.put(2, "Falling (Grouped)")
-        map.put(3, "Lying (Grouped)")
-        map.put(4, "Movement")
-        map.put(5, "Running")
-        map.put(6, "Sitting/Standing")
-        map.put(7, "Walking at normal speed")
+        map.put(0, "Falling (Grouped)")
+        map.put(1, "Lying (Grouped)")
+        map.put(2, "Running")
+        map.put(3, "Sitting/Standing")
+        map.put(4, "Walking at normal speed")
     }
 
     fun mapOutputLabel(maxIndex : Int) : String {
@@ -127,7 +135,7 @@ class LiveDataActivity : AppCompatActivity() {
 
     fun getActivityPredictionString(window : Array<FloatArray>): String {
         System.out.println("Got this:" + window.size)
-        val output = FloatArray(8)
+        val output = FloatArray(5)
         interpreter!!.run(arrayOf(window), arrayOf(output))
         val maxIndex = output.indices.maxByOrNull <Int, Float> { it: Int -> output[it] } ?: -1
         val resultString = "Activity is: " + mapOutputLabel(maxIndex)
@@ -138,7 +146,7 @@ class LiveDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_live_data)
         createMap()
-        interpreter = Interpreter(loadModelFile("CNN_HAR_v2_acc_86.tflite"))
+        interpreter = Interpreter(loadModelFile("CNN_HAR_v4_acc_93.tflite"))
         canCollect = true
         setupCharts()
 
@@ -187,7 +195,7 @@ class LiveDataActivity : AppCompatActivity() {
 
     private fun updateHistoricalData(predictedActivity: String ){
 
-        val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val sdf = SimpleDateFormat("dd/M/yyyy")
         val currentDate = sdf.format(Date())
 
         postDataToSQLite(1, currentDate, predictedActivity)
@@ -196,14 +204,17 @@ class LiveDataActivity : AppCompatActivity() {
 
     private fun postDataToSQLite(duration: Long, timestamp: String, name: String) {
 
-//        if (!databaseHelper!!.checkActivity(name)) {
-            var activity = Activity(activity_name = name,
-                duration = duration,
-                date = timestamp
-            )
+        var activity = Activity(activity_name = name,
+            duration = duration,
+            date = timestamp
+        )
+        if (!historyDatabaseHelper!!.checkActivityToday(name, timestamp))
             historyDatabaseHelper!!.addActivity(activity)
-//            return true
-//        }
+
+        else{
+            historyDatabaseHelper!!.updateDuration(activity)
+        }
+
     }
 
     private fun updatePrediction(current_predictions: Array<FloatArray>) {
@@ -217,7 +228,7 @@ class LiveDataActivity : AppCompatActivity() {
                             sleep(2000)
                             runOnUiThread {
                                     activityPrediction = getActivityPredictionString(current_predictions)
-//                                    updateHistoricalData(activityPrediction)
+                                    updateHistoricalData(activityPrediction)
                                     predictionTextView.setText(activityPrediction)
                                 }
 //                            }
@@ -294,15 +305,11 @@ class LiveDataActivity : AppCompatActivity() {
                 respeckChart.moveViewToX(respeckChart.lowestVisibleX + 40)
             }
         }
-
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(respeckLiveUpdateReceiver)
-//        unregisterReceiver(thingyLiveUpdateReceiver)
         looperRespeck.quit()
-//        looperThingy.quit()
     }
 }

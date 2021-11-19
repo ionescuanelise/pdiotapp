@@ -21,10 +21,11 @@ class HistoryHealthData: AppCompatActivity() {
         activityModelArrayList = ArrayList<ModelActivity>()
         activityModelArrayList!!.add(ModelActivity("Running", R.mipmap.running_foreground))
         activityModelArrayList!!.add(ModelActivity("Walking", R.mipmap.walking_foreground))
-        activityModelArrayList!!.add(ModelActivity("Desk work", R.mipmap.desk_work_foreground))
-        activityModelArrayList!!.add(ModelActivity("Climbing stairs", R.mipmap.climbing_foreground))
+//        activityModelArrayList!!.add(ModelActivity("Desk work", R.mipmap.desk_work_foreground))
+//        activityModelArrayList!!.add(ModelActivity("Climbing stairs", R.mipmap.climbing_foreground))
         activityModelArrayList!!.add(ModelActivity("Falling", R.mipmap.falling_foreground))
         activityModelArrayList!!.add(ModelActivity("Sitting/Standing", R.mipmap.standing_foreground))
+//        activityModelArrayList!!.add(ModelActivity("Lying", R.mipmap.lying_foreground))
 
 
         val activityAdapter = AdapterActivity(this, activityModelArrayList)
