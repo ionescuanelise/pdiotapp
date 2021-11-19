@@ -88,4 +88,5 @@
     <string name="live_processing">Watch Live Data</string>
     <string name="connect_sensors">Connect your Respeck</string>
     <string name="track_history">Health Data</string>
+    <string name="description">View history data</string>
 </resources>

@@ -66,6 +66,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".HistoryHealthData"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".HomePage"
             android:screenOrientation="portrait" />
         <activity
