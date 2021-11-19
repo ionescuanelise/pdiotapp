@@ -19,12 +19,12 @@ class HistoryHealthData: AppCompatActivity() {
         activityRV = findViewById(R.id.idRVCourse)
 
         activityModelArrayList = ArrayList<ModelActivity>()
-        activityModelArrayList!!.add(ModelActivity("Running", R.drawable.logo_background))
-        activityModelArrayList!!.add(ModelActivity("Walking", R.drawable.logo_background))
-        activityModelArrayList!!.add(ModelActivity("Desk work", R.drawable.logo_background))
-        activityModelArrayList!!.add(ModelActivity("Climbing stairs", R.drawable.logo_background))
-        activityModelArrayList!!.add(ModelActivity("Falling", R.drawable.logo_background))
-        activityModelArrayList!!.add(ModelActivity("Sitting/Standing", R.drawable.logo_background))
+        activityModelArrayList!!.add(ModelActivity("Running", R.mipmap.running_foreground))
+        activityModelArrayList!!.add(ModelActivity("Walking", R.mipmap.walking_foreground))
+        activityModelArrayList!!.add(ModelActivity("Desk work", R.mipmap.desk_work_foreground))
+        activityModelArrayList!!.add(ModelActivity("Climbing stairs", R.mipmap.climbing_foreground))
+        activityModelArrayList!!.add(ModelActivity("Falling", R.mipmap.falling_foreground))
+        activityModelArrayList!!.add(ModelActivity("Sitting/Standing", R.mipmap.standing_foreground))
 
 
         val activityAdapter = AdapterActivity(this, activityModelArrayList)
