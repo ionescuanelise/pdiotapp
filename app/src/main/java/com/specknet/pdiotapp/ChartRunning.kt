@@ -22,7 +22,7 @@ class ChartRunning: AppCompatActivity() {
 
     private lateinit var barChart: BarChart
     private var TAG = "FragmentActivity"
-    private var scoreList = ArrayList<DataPointsGraph>()
+    private var dataPointsList = ArrayList<DataPointsGraph>()
     private val act = this@ChartRunning
     val historyDatabase = HistoryDatabase(act)
 
@@ -32,16 +32,14 @@ class ChartRunning: AppCompatActivity() {
 
         barChart = findViewById(R.id.barChart)
 
-        scoreList = getScoreList()
+        dataPointsList = getScoreList()
 
         initBarChart()
 
-        //now draw bar chart with dynamic data
         val entries: ArrayList<BarEntry> = ArrayList()
 
-        //you can replace this data object with  your custom object
-        for (i in scoreList.indices) {
-            val score = scoreList[i]
+        for (i in dataPointsList.indices) {
+            val score = dataPointsList[i]
             entries.add(BarEntry(i.toFloat(), score.time))
         }
 
@@ -56,25 +54,19 @@ class ChartRunning: AppCompatActivity() {
     }
 
     private fun initBarChart() {
-        //hide grid lines
         barChart.axisLeft.setDrawGridLines(false)
         val xAxis: XAxis = barChart.xAxis
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
 
-        //remove right y-axis
         barChart.axisRight.isEnabled = false
 
-        //remove legend
         barChart.legend.isEnabled = false
 
-        //remove description label
         barChart.description.isEnabled = false
 
-        //add animation
         barChart.animateY(3000)
 
-        // to draw label on xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
         xAxis.valueFormatter = MyAxisFormatter()
         xAxis.setDrawLabels(true)
@@ -87,16 +79,14 @@ class ChartRunning: AppCompatActivity() {
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             val index = value.toInt()
             Log.d(TAG, "getAxisLabel: index $index")
-            return if (index < scoreList.size) {
-                scoreList[index].day
+            return if (index < dataPointsList.size) {
+                dataPointsList[index].day
             } else {
                 ""
             }
         }
     }
 
-    // simulate api call
-    // we are initialising it directly
     private fun getScoreList(): ArrayList<DataPointsGraph> {
 
         var durationToday = 10.0F
@@ -108,12 +98,12 @@ class ChartRunning: AppCompatActivity() {
             val currentDate = sdf.format(day)
             durationToday = historyDatabase.getDuration("Running", currentDate).toFloat()
             if (durationToday > 0)
-                scoreList.add(DataPointsGraph(currentDate, durationToday))
+                dataPointsList.add(DataPointsGraph(currentDate, durationToday))
             else
-                scoreList.add(DataPointsGraph(currentDate, random[i]))
+                dataPointsList.add(DataPointsGraph(currentDate, random[i]))
         }
 
-        return scoreList
+        return dataPointsList
     }
 
 }
