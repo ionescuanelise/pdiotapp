@@ -102,8 +102,8 @@ class ChartWalking: AppCompatActivity() {
         var durationToday = 10.0F
         val sdf = SimpleDateFormat("dd/M/yyyy")
         val currentDate = sdf.format(Date())
-        var random = arrayOf(1500.0F, 2100.0F, 1440.0F, 1350.0F, 2000.0F)
-        for (i in 4 downTo 0 step 1){
+        var random = arrayOf(1500.0F, 2100.0F, 1440.0F, 1350.0F, 2000.0F, 1500.0F, 1900.0F)
+        for (i in 6 downTo 0 step 1){
             val day: Date = DateUtils.addDays(Date(), -i)
             val currentDate = sdf.format(day)
             durationToday = historyDatabase.getDuration("Walking at normal speed", currentDate).toFloat()
