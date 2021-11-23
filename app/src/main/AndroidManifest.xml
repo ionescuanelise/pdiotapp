@@ -75,6 +75,21 @@
             android:name=".onboarding.OnBoardingActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".ChartRunning"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChartSitting"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChartLying"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChartWalking"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ChartFalling"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait">
