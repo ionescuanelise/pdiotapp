@@ -12,12 +12,19 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.specknet.pdiotapp.utils.DataPointsGraph
+import org.apache.commons.lang3.time.DateUtils
+import org.apache.commons.lang3.time.DateUtils.addDays
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChartRunning: AppCompatActivity() {
 
     private lateinit var barChart: BarChart
     private var TAG = "FragmentActivity"
     private var scoreList = ArrayList<DataPointsGraph>()
+    private val act = this@ChartRunning
+    val historyDatabase = HistoryDatabase(act)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,11 +98,20 @@ class ChartRunning: AppCompatActivity() {
     // simulate api call
     // we are initialising it directly
     private fun getScoreList(): ArrayList<DataPointsGraph> {
-        scoreList.add(DataPointsGraph("Mon", 56.0F))
-        scoreList.add(DataPointsGraph("Tue", 75.0F))
-        scoreList.add(DataPointsGraph("Wed", 85.0F))
-        scoreList.add(DataPointsGraph("Thu", 45.0F))
-        scoreList.add(DataPointsGraph("Fri", 63.0F))
+
+        var durationToday = 10.0F
+        val sdf = SimpleDateFormat("dd/M/yyyy")
+        val currentDate = sdf.format(Date())
+        var random = arrayOf(70.0F, 82.0F, 94.0F, 71.0F, 90.0F)
+        for (i in 4 downTo 0 step 1){
+            val day: Date = DateUtils.addDays(Date(), -i)
+            val currentDate = sdf.format(day)
+            durationToday = historyDatabase.getDuration("Running", currentDate).toFloat()
+            if (durationToday > 0)
+                scoreList.add(DataPointsGraph(currentDate, durationToday))
+            else
+                scoreList.add(DataPointsGraph(currentDate, random[i]))
+        }
 
         return scoreList
     }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.sql.Timestamp
 import java.util.*
 
 class HistoryDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -45,28 +46,51 @@ class HistoryDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         db.close()
     }
 
-    fun getDuration(activity: Activity): Long {
-        val name = activity.activity_name
-        val date = activity.date
-        val query =
-            "SELECT * FROM $TABLE_HISTORY WHERE $COLUMN_ACTIVITY_NAME =  \"$name\" AND $COLUMN_TIMESTAMP =  \"$date\""
 
-        val db = this.writableDatabase
+    fun getDuration(name: String, date: String): Long {
+//        val query =
+//            "SELECT * FROM $TABLE_HISTORY WHERE $COLUMN_ACTIVITY_NAME = ? AND $COLUMN_TIMESTAMP =  ?"
+//
+//        val db = this.readableDatabase
+//        var args = arrayOf(name, date)
+//        val cursor = db.rawQuery(query, args)
 
-        val cursor = db.rawQuery(query, null)
+        val columns = arrayOf(COLUMN_DURATION)
+        val db = this.readableDatabase
 
+//        selection criteria
+        val selection = "$COLUMN_ACTIVITY_NAME = ? AND $COLUMN_TIMESTAMP = ?"
+
+        // selection argument
+        val selectionArgs = arrayOf(name, date)
+
+        // query user table with condition
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id FROM user WHERE user_email = 'jack@androidtutorialshub.com';
+         */
+        val cursor = db.query(TABLE_HISTORY, //Table to query
+            columns,        //columns to return
+            selection,      //columns for the WHERE clause
+            selectionArgs,  //The values for the WHERE clause
+            null,  //group the rows
+            null,   //filter by row groups
+            null)  //The sort order
+
+//        System.out.println("name " + name+ " date " +date)
+//        System.out.println("Cursor "+ cursor.getLong(0))
         if( cursor != null && cursor.moveToFirst() ){
-//            cursor.moveToFirst()
-            val duration = cursor.getLong(3)
-            return duration
+            return cursor.getLong(0)
         }
         return 0
+
     }
 
     // Increment score by 1
     fun updateDuration(activity: Activity) {
         val database = this.writableDatabase
-        var initial_duration: Long = getDuration(activity)
+        var initial_duration: Long = getDuration(activity.activity_name, activity.date)
         val duration = initial_duration + 1
         val values = ContentValues()
         values.put(COLUMN_DURATION, duration)
@@ -84,7 +108,7 @@ class HistoryDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         val db = this.writableDatabase
 
         val values = ContentValues()
-        val initial_duration = getDuration(activity)
+        val initial_duration = getDuration(activity.activity_name, activity.date)
         values.put(COLUMN_ACTIVITY_NAME, activity.activity_name)
         values.put(COLUMN_DURATION, initial_duration + activity.duration)
         values.put(COLUMN_TIMESTAMP, activity.date)
@@ -107,7 +131,7 @@ class HistoryDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
     fun checkActivityToday(activityName: String, date:String): Boolean {
-        val columns = arrayOf(COLUMN_ACTIVITY_NAME, COLUMN_TIMESTAMP)
+        val columns = arrayOf(COLUMN_ACTIVITY_ID)
         val db = this.readableDatabase
 
 //        selection criteria
@@ -132,8 +156,8 @@ class HistoryDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
         val cursorCount = cursor.count
-        cursor.close()
-        db.close()
+//        cursor.close()
+//        db.close()
 
         if (cursorCount > 0) {
             return true

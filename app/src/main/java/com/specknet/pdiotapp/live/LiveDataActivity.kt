@@ -121,8 +121,8 @@ class LiveDataActivity : AppCompatActivity() {
 
     //grouped activities v4
     fun createMap(){
-        map.put(0, "Falling (Grouped)")
-        map.put(1, "Lying (Grouped)")
+        map.put(0, "Falling")
+        map.put(1, "Lying")
         map.put(2, "Running")
         map.put(3, "Sitting/Standing")
         map.put(4, "Walking at normal speed")
@@ -138,7 +138,7 @@ class LiveDataActivity : AppCompatActivity() {
         val output = FloatArray(5)
         interpreter!!.run(arrayOf(window), arrayOf(output))
         val maxIndex = output.indices.maxByOrNull <Int, Float> { it: Int -> output[it] } ?: -1
-        val resultString = "Activity is: " + mapOutputLabel(maxIndex)
+        val resultString = mapOutputLabel(maxIndex)
         return resultString
     }
 
@@ -208,6 +208,7 @@ class LiveDataActivity : AppCompatActivity() {
             duration = duration,
             date = timestamp
         )
+        System.out.println("Activity today: " + name + " timestamp: " + timestamp)
         if (!historyDatabaseHelper!!.checkActivityToday(name, timestamp))
             historyDatabaseHelper!!.addActivity(activity)
 
@@ -229,7 +230,7 @@ class LiveDataActivity : AppCompatActivity() {
                             runOnUiThread {
                                     activityPrediction = getActivityPredictionString(current_predictions)
                                     updateHistoricalData(activityPrediction)
-                                    predictionTextView.setText(activityPrediction)
+                                    predictionTextView.setText("Activity is: " + activityPrediction)
                                 }
 //                            }
                         } catch (e: InterruptedException) {
