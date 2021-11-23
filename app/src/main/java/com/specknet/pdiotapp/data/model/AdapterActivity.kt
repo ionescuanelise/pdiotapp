@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.specknet.pdiotapp.ChartRunning
-import com.specknet.pdiotapp.R
+import com.specknet.pdiotapp.*
 import com.specknet.pdiotapp.data.model.AdapterActivity.Viewholder
 import java.util.ArrayList
 
@@ -36,7 +35,19 @@ class AdapterActivity(
                     it.getContext().startActivity(intent)
                 }
                 1 -> {
-                    intent = Intent(context, ChartRunning::class.java)
+                    intent = Intent(context, ChartWalking::class.java)
+                    it.getContext().startActivity(intent)
+                }
+                2 -> {
+                    intent = Intent(context, ChartFalling::class.java)
+                    it.getContext().startActivity(intent)
+                }
+                3 -> {
+                    intent = Intent(context, ChartSitting::class.java)
+                    it.getContext().startActivity(intent)
+                }
+                4 -> {
+                    intent = Intent(context, ChartLying::class.java)
                     it.getContext().startActivity(intent)
                 }
             }

@@ -6,6 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 class ChartFalling : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.chart_activity)
+        setContentView(R.layout.chart_running)
     }
 }
