@@ -16,8 +16,8 @@ import com.specknet.pdiotapp.utils.DataPointsGraph
 class ChartRunning: AppCompatActivity() {
 
     private lateinit var barChart: BarChart
-    private var TAG = "FragmentActivity"
-    private var scoreList = ArrayList<DataPointsGraph>()
+    private var TAG = "RunningChart"
+    private var dataPointsList = ArrayList<DataPointsGraph>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,16 +25,14 @@ class ChartRunning: AppCompatActivity() {
 
         barChart = findViewById(R.id.barChart)
 
-        scoreList = getScoreList()
+        dataPointsList = getScoreList()
 
         initBarChart()
 
-        //now draw bar chart with dynamic data
         val entries: ArrayList<BarEntry> = ArrayList()
 
-        //you can replace this data object with  your custom object
-        for (i in scoreList.indices) {
-            val score = scoreList[i]
+        for (i in dataPointsList.indices) {
+            val score = dataPointsList[i]
             entries.add(BarEntry(i.toFloat(), score.time))
         }
 
@@ -49,25 +47,19 @@ class ChartRunning: AppCompatActivity() {
     }
 
     private fun initBarChart() {
-        //hide grid lines
         barChart.axisLeft.setDrawGridLines(false)
         val xAxis: XAxis = barChart.xAxis
         xAxis.setDrawGridLines(false)
         xAxis.setDrawAxisLine(false)
 
-        //remove right y-axis
         barChart.axisRight.isEnabled = false
 
-        //remove legend
         barChart.legend.isEnabled = false
 
-        //remove description label
         barChart.description.isEnabled = false
 
-        //add animation
         barChart.animateY(3000)
 
-        // to draw label on xAxis
         xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
         xAxis.valueFormatter = MyAxisFormatter()
         xAxis.setDrawLabels(true)
@@ -80,24 +72,24 @@ class ChartRunning: AppCompatActivity() {
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             val index = value.toInt()
             Log.d(TAG, "getAxisLabel: index $index")
-            return if (index < scoreList.size) {
-                scoreList[index].day
+            return if (index < dataPointsList.size) {
+                dataPointsList[index].day
             } else {
                 ""
             }
         }
     }
 
-    // simulate api call
-    // we are initialising it directly
     private fun getScoreList(): ArrayList<DataPointsGraph> {
-        scoreList.add(DataPointsGraph("Mon", 56.0F))
-        scoreList.add(DataPointsGraph("Tue", 75.0F))
-        scoreList.add(DataPointsGraph("Wed", 85.0F))
-        scoreList.add(DataPointsGraph("Thu", 45.0F))
-        scoreList.add(DataPointsGraph("Fri", 63.0F))
+        dataPointsList.add(DataPointsGraph("Mon", 56.0F))
+        dataPointsList.add(DataPointsGraph("Tue", 75.0F))
+        dataPointsList.add(DataPointsGraph("Wed", 85.0F))
+        dataPointsList.add(DataPointsGraph("Thu", 45.0F))
+        dataPointsList.add(DataPointsGraph("Fri", 63.0F))
+        dataPointsList.add(DataPointsGraph("Sat", 43.0F))
+        dataPointsList.add(DataPointsGraph("Sun", 70.0F))
 
-        return scoreList
+        return dataPointsList
     }
 
 }
