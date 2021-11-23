@@ -21,7 +21,7 @@ import kotlin.collections.ArrayList
 class ChartRunning: AppCompatActivity() {
 
     private lateinit var barChart: BarChart
-    private var TAG = "FragmentActivity"
+    private var TAG = "RunningActivity"
     private var dataPointsList = ArrayList<DataPointsGraph>()
     private val act = this@ChartRunning
     val historyDatabase = HistoryDatabase(act)
@@ -89,12 +89,11 @@ class ChartRunning: AppCompatActivity() {
 
     private fun getScoreList(): ArrayList<DataPointsGraph> {
 
-        var durationToday = 10.0F
+        var durationToday: Float
         val sdf = SimpleDateFormat("dd/M/yyyy")
-        val currentDate = sdf.format(Date())
         var random = arrayOf(70.0F, 82.0F, 94.0F, 71.0F, 90.0F, 65.0F, 70.0F)
         for (i in 6 downTo 0 step 1){
-            val day: Date = DateUtils.addDays(Date(), -i)
+            val day: Date = addDays(Date(), -i)
             val currentDate = sdf.format(day)
             durationToday = historyDatabase.getDuration("Running", currentDate).toFloat()
             if (durationToday > 0)
