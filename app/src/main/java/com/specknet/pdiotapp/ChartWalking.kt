@@ -90,15 +90,12 @@ class ChartWalking: AppCompatActivity() {
 
         var durationToday: Float
         val sdf = SimpleDateFormat("dd/M/yyyy")
-        var random = arrayOf(1500.0F, 2100.0F, 1440.0F, 1350.0F, 2000.0F, 1500.0F, 1900.0F)
         for (i in 6 downTo 0 step 1){
             val day: Date = DateUtils.addDays(Date(), -i)
             val currentDate = sdf.format(day)
             durationToday = historyDatabase.getDuration("Walking at normal speed", currentDate).toFloat()
             if (durationToday > 0)
                 dataPointsList.add(DataPointsGraph(currentDate, durationToday))
-            else
-                dataPointsList.add(DataPointsGraph(currentDate, random[i]))
         }
 
         return dataPointsList

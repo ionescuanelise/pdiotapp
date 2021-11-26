@@ -99,7 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="30dp"
-                android:text="Try to always connect both sensors." />
+                android:text="Make sure your Respeck is connected." />
 
         </LinearLayout>
 

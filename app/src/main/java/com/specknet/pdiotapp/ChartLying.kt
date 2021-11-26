@@ -90,15 +90,12 @@ class ChartLying: AppCompatActivity() {
 
         var durationToday: Float
         val sdf = SimpleDateFormat("dd/M/yyyy")
-        var random = arrayOf(1570.0F, 2082.0F, 1794.0F, 2071.0F, 1990.0F, 1870.0F, 1900.0F)
         for (i in 6 downTo 0 step 1){
             val day: Date = DateUtils.addDays(Date(), -i)
             val currentDate = sdf.format(day)
             durationToday = historyDatabase.getDuration("Lying", currentDate).toFloat()
             if (durationToday > 0)
                 dataPointsList.add(DataPointsGraph(currentDate, durationToday))
-            else
-                dataPointsList.add(DataPointsGraph(currentDate, random[i]))
         }
 
         return dataPointsList

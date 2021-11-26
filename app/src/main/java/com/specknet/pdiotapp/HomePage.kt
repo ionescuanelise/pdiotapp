@@ -7,18 +7,21 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import com.google.android.material.snackbar.Snackbar
 import com.specknet.pdiotapp.bluetooth.BluetoothSpeckService
 import com.specknet.pdiotapp.bluetooth.ConnectingActivity
 import com.specknet.pdiotapp.live.LiveDataActivity
 import com.specknet.pdiotapp.onboarding.OnBoardingActivity
 import com.specknet.pdiotapp.utils.Constants
 import com.specknet.pdiotapp.utils.Utils
+import kotlinx.android.synthetic.main.activity_main_login.*
 
 class HomePage : AppCompatActivity() {
 
@@ -203,50 +206,50 @@ class HomePage : AppCompatActivity() {
         if (!readStoragePermissionGranted) numberOfPermissionsUngranted++
         if (!writeStoragePermissionGranted) numberOfPermissionsUngranted++
 
-//        // show a general message if we need multiple permissions
-//        if (numberOfPermissionsUngranted > 1) {
-//            val generalSnackbar = Snackbar
-//                .make(coordinatorLayout, "Several permissions are needed for correct app functioning", Snackbar.LENGTH_LONG)
-//                .setAction("SETTINGS") {
-//                    startActivity(Intent(Settings.ACTION_SETTINGS))
-//                }
-//                .show()
-//        }
-//        else if(numberOfPermissionsUngranted == 1) {
-//            var snackbar: Snackbar = Snackbar.make(coordinatorLayout, "", Snackbar.LENGTH_LONG)
-//            if (!locationPermissionGranted) {
-//                snackbar = Snackbar
-//                    .make(
-//                        coordinatorLayout,
-//                        "Location permission needed for Bluetooth to work.",
-//                        Snackbar.LENGTH_LONG
-//                    )
-//            }
+        // show a general message if we need multiple permissions
+        if (numberOfPermissionsUngranted > 1) {
+            val generalSnackbar = Snackbar
+                .make(relativeLayout, "Several permissions are needed for correct app functioning", Snackbar.LENGTH_LONG)
+                .setAction("SETTINGS") {
+                    startActivity(Intent(Settings.ACTION_SETTINGS))
+                }
+                .show()
+        }
+        else if(numberOfPermissionsUngranted == 1) {
+            var snackbar: Snackbar = Snackbar.make(relativeLayout, "", Snackbar.LENGTH_LONG)
+            if (!locationPermissionGranted) {
+                snackbar = Snackbar
+                    .make(
+                        relativeLayout,
+                        "Location permission needed for Bluetooth to work.",
+                        Snackbar.LENGTH_LONG
+                    )
+            }
+
+            if(!cameraPermissionGranted) {
+                snackbar = Snackbar
+                    .make(
+                        relativeLayout,
+                        "Camera permission needed for QR code scanning to work.",
+                        Snackbar.LENGTH_LONG
+                    )
+            }
 //
-//            if(!cameraPermissionGranted) {
-//                snackbar = Snackbar
-//                    .make(
-//                        coordinatorLayout,
-//                        "Camera permission needed for QR code scanning to work.",
-//                        Snackbar.LENGTH_LONG
-//                    )
-//            }
-//
-//            if(!readStoragePermissionGranted || !writeStoragePermissionGranted) {
-//                snackbar = Snackbar
-//                    .make(
-//                        coordinatorLayout,
-//                        "Storage permission needed to record sensor.",
-//                        Snackbar.LENGTH_LONG
-//                    )
-//            }
-//
-//            snackbar.setAction("SETTINGS") {
-//                val settingsIntent = Intent(Settings.ACTION_SETTINGS)
-//                startActivity(settingsIntent)
-//            }
-//                .show()
-//        }
+            if(!readStoragePermissionGranted || !writeStoragePermissionGranted) {
+                snackbar = Snackbar
+                    .make(
+                        relativeLayout,
+                        "Storage permission needed to record sensor.",
+                        Snackbar.LENGTH_LONG
+                    )
+            }
+
+            snackbar.setAction("SETTINGS") {
+                val settingsIntent = Intent(Settings.ACTION_SETTINGS)
+                startActivity(settingsIntent)
+            }
+                .show()
+        }
 
     }
 

@@ -90,15 +90,12 @@ class ChartSitting: AppCompatActivity() {
 
         var durationToday: Float
         val sdf = SimpleDateFormat("dd/M/yyyy")
-        var random = arrayOf(270.0F, 382.0F, 294.0F, 371.0F, 290.0F, 300.0F, 280.0F)
         for (i in 6 downTo 0 step 1){
             val day: Date = DateUtils.addDays(Date(), -i)
             val currentDate = sdf.format(day)
             durationToday = historyDatabase.getDuration("Sitting/Standing", currentDate).toFloat()
             if (durationToday > 0)
                 dataPointsList.add(DataPointsGraph(currentDate, durationToday))
-            else
-                dataPointsList.add(DataPointsGraph(currentDate, random[i]))
         }
 
         return dataPointsList

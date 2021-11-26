@@ -91,15 +91,12 @@ class ChartRunning: AppCompatActivity() {
 
         var durationToday: Float
         val sdf = SimpleDateFormat("dd/M/yyyy")
-        var random = arrayOf(70.0F, 82.0F, 94.0F, 71.0F, 90.0F, 65.0F, 70.0F)
         for (i in 6 downTo 0 step 1){
             val day: Date = addDays(Date(), -i)
             val currentDate = sdf.format(day)
             durationToday = historyDatabase.getDuration("Running", currentDate).toFloat()
             if (durationToday > 0)
                 dataPointsList.add(DataPointsGraph(currentDate, durationToday))
-            else
-                dataPointsList.add(DataPointsGraph(currentDate, random[i]))
         }
 
         return dataPointsList
