@@ -234,7 +234,7 @@ class HomePage : AppCompatActivity() {
                         Snackbar.LENGTH_LONG
                     )
             }
-//
+
             if(!readStoragePermissionGranted || !writeStoragePermissionGranted) {
                 snackbar = Snackbar
                     .make(

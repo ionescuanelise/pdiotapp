@@ -1,8 +1,16 @@
 package com.specknet.pdiotapp
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
@@ -25,9 +33,16 @@ class ChartSitting: AppCompatActivity() {
     private val act = this@ChartSitting
     val historyDatabase = HistoryDatabase(act)
 
+    private val channelId = "i.apps.notifications"
+    private val description = "Test notification"
+    lateinit var notificationManager: NotificationManager
+    lateinit var notificationChannel: NotificationChannel
+    lateinit var builder: Notification.Builder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.chart_sitting)
+        notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         barChart = findViewById(R.id.barChart)
 
@@ -50,6 +65,29 @@ class ChartSitting: AppCompatActivity() {
 
         barChart.invalidate()
 
+        sendNotification()
+
+    }
+
+    private fun sendNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.GREEN
+            notificationChannel.enableVibration(true)
+            notificationManager.createNotificationChannel(notificationChannel)
+
+            builder = Notification.Builder(this, channelId)
+                .setSmallIcon(R.mipmap.logo_foreground)
+                .setContentTitle("Inactive for too long")
+                .setContentText("Get up and exercise, you have been sitting down for too long.")
+        } else {
+            builder = Notification.Builder(this)
+                .setSmallIcon(R.mipmap.logo_foreground)
+                .setContentTitle("Inactive for too long")
+                .setContentText("Get up and exercise, you have been sitting down for too long.")
+        }
+        notificationManager.notify(1234, builder.build())
     }
 
     private fun initBarChart() {
