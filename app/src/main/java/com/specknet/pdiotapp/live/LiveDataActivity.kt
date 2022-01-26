@@ -146,7 +146,7 @@ class LiveDataActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_live_data)
         createMap()
-        interpreter = Interpreter(loadModelFile("CNN_HAR_v8_25_windowsize.tflite"))
+        interpreter = Interpreter(loadModelFile("CNN_HAR_v7_50_windowsize.tflite"))
         canCollect = true
         setupCharts()
 
@@ -171,8 +171,8 @@ class LiveDataActivity : AppCompatActivity() {
                     val g = liveData.gyro
 
                     predictions.add(floatArrayOf(x, y, z, g.x, g.y, g.z))
-                    if (predictions.size >= 25) {
-                        val current_predictions = predictions.take(25).toTypedArray()
+                    if (predictions.size >= 50) {
+                        val current_predictions = predictions.take(50).toTypedArray()
                         updatePrediction(current_predictions)
                         predictions.clear()
                     }
